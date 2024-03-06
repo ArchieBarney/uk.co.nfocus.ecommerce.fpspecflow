@@ -17,7 +17,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.Support
             myWait.Until(drv => drv.FindElement(locator).Enabled);
         }
 
-        public static string ScrollElementIntoView(IWebDriver driver, IWebElement element, string nameOfScreenshot)
+        public static string ScrollElementIntoViewAndTakeScreenshot(IWebDriver driver, IWebElement element, string nameOfScreenshot)
         {
             // FOR DANNY! Sleep used to make sure element scrolls into view for screenshot
             Thread.Sleep(500);

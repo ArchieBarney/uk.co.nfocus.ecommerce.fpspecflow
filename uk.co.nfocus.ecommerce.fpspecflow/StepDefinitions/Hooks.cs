@@ -17,7 +17,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
     [Binding]
     internal class Hooks
     {
-        private IWebDriver _driver;
+        private IWebDriver? _driver;
         private readonly ScenarioContext _scenarioContext;
         private readonly WDWrapper _wrapper;
 
@@ -62,7 +62,14 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
                     _driver = new EdgeDriver();
                     break;
             }
-            
+            string startURL = TestContext.Parameters["WebAppURL"];
+            if (startURL == null)
+            {
+                Console.WriteLine("URL provided is null, using default");
+                startURL = "https://www.edgewordstraining.co.uk/demo-site/";
+            }
+            _driver.Url = startURL;
+
             _wrapper.Driver = _driver;
 
             TestPrep();
@@ -71,21 +78,24 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
         [After("@GUI")]
         public void TearDown()
         {
+            HomePOM home = (HomePOM)_scenarioContext["homePOM"];
+            home.GoAccountLogin();
+            home.Logout();
             _wrapper.Driver.Quit();
         }
 
         public void TestPrep()
         {
             // Dismiss bottom link to prevent intercepted web elements
-            _driver.FindElement(By.CssSelector(".woocommerce-store-notice__dismiss-link")).Click();
+            _wrapper.Driver.FindElement(By.CssSelector(".woocommerce-store-notice__dismiss-link")).Click();
 
             // Get to the account page from home POM
-            HomePOM home = new(_driver);
+            HomePOM home = new(_wrapper.Driver);
             home.GoAccountLogin();
             _scenarioContext["homePOM"] = home;
 
             // Use account POM to login to a placeholder account
-            AccountPOM account = new(_driver)
+            AccountPOM account = new(_wrapper.Driver)
             {
                 Username = Environment.GetEnvironmentVariable("EMAIL"),
                 Password = Environment.GetEnvironmentVariable("PASSWORD")
@@ -93,10 +103,10 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
             account.AccountLogin();
 
             //Empty Basket check
-            _driver.FindElement(By.PartialLinkText("Cart")).Click();
+            _wrapper.Driver.FindElement(By.PartialLinkText("Cart")).Click();
             try
             {
-                _driver.FindElement(By.CssSelector(".remove")).Click();
+                _wrapper.Driver.FindElement(By.CssSelector(".remove")).Click();
             }
             catch (Exception)
             {
@@ -107,7 +117,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
             account.ShopNavigate();
 
             // Add items to cart and view cart
-            ShopPOM shop = new(_driver);
+            ShopPOM shop = new(_wrapper.Driver);
             shop.AddItemToCart();
             shop.VeiwCart();
         }
