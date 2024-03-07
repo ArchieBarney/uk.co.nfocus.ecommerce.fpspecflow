@@ -17,7 +17,6 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
     [Binding]
     internal class Hooks
     {
-        private IWebDriver? _driver;
         private readonly ScenarioContext _scenarioContext;
         private readonly WDWrapper _wrapper;
 
@@ -30,6 +29,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
         [Before("@GUI")]
         public void SetUp()
         {
+            IWebDriver _driver;
             string browser = Environment.GetEnvironmentVariable("BROWSER");
 
             if (browser == null)

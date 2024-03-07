@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
 {
     [Binding]
-    public class OrderTestCase
+    public class CouponTestCase
     {
         private readonly ScenarioContext _scenarioContext;
 
-        public OrderTestCase(ScenarioContext scenarioContext)
+        public CouponTestCase(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
         }
 
         [Given(@"I have entered valid coupon '(.*)'")]
-        public void GivenIHaveEnteredValidCoupon(string edgewords0)
+        public void GivenIHaveEnteredValidCoupon(string couponCode)
         {
             _scenarioContext.Pending();
         }
@@ -29,8 +29,8 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
             _scenarioContext.Pending();
         }
 
-        [Then(@"'(.*)' is taken off the subtotal")]
-        public void ThenIsTakenOffTheSubtotal(string p0)
+        [Then(@"(.*) is taken off the subtotal")]
+        public void ThenIsTakenOffTheSubtotal(int couponValue)
         {
             _scenarioContext.Pending();
         }
