@@ -1,8 +1,13 @@
-﻿using System;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uk.co.nfocus.ecommerce.fpspecflow.Support.POMClasses;
+
+using static uk.co.nfocus.ecommerce.fpspecflow.Support.StaticHelperClass;
 
 
 namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
@@ -11,39 +16,84 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
     public class OrderNumTestCase
     {
         private readonly ScenarioContext _scenarioContext;
+        private readonly IWebDriver _driver;
+        private CartPOM? _cart;
+        private CheckoutPOM? _checkout;
 
         public OrderNumTestCase(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
+            _driver = (IWebDriver)_scenarioContext["driverWrapped"];
         }
+
         [Given(@"I click on Proceed to Checkout")]
         public void GivenIClickOnProceedToCheckout()
         {
-            _scenarioContext.Pending();
+            // Set the cart up to proceed to checkout
+            CartPOM cart = new(_driver);
+            _cart = cart;
+            _cart.ProceedToCheckout();
         }
 
         [Given(@"I fill '(.*)', '(.*)', '(.*)', '(.*)' and '(.*)' into the corresponding fields")]
         public void GivenIFillAndIntoTheCorrespondingFields(string street, string town, string postcode, string phone, string email)
         {
-            _scenarioContext.Pending();
+            // Instansiate the checkout class with all the required fields to pass an order
+            CheckoutPOM checkout = new(_driver)
+            {
+                firstName = "Archie",
+                lastName = "Barnett",
+                streetAdress = street,
+                townCity = town,
+                postcode = postcode,
+                phone = phone,
+                email = email
+            };
+            _checkout = checkout;
         }
 
         [Given(@"I place the order assuming check payment is triggered")]
         public void GivenIPlaceTheOrderAssumingCheckPaymentIsTriggered()
         {
-            _scenarioContext.Pending();
+            // Seperate reference for stale element (Thread works, web driver wait doesnt work)
+            Thread.Sleep(1000);
+            var checkPayment = _driver.FindElement(By.CssSelector(".wc_payment_method.payment_method_cheque"));
+            checkPayment.Click();
+            _checkout.PlaceOrder();
         }
 
         [When(@"I capture the order number")]
         public void WhenICaptureTheOrderNumber()
         {
-            _scenarioContext.Pending();
+            // Wait for the page to load in order to recieve the order number
+            StaticWaitForElement(_driver, By.CssSelector("li[class='woocommerce-order-overview__order order'] strong"));
+            string checkoutOrderNumber = _checkout.Order_Number;
+            _scenarioContext["CheckoutOrderNum"] = checkoutOrderNumber;
+            Console.WriteLine("Order number is: " + checkoutOrderNumber);
         }
 
         [Then(@"The same order number should appear at the top of account orders")]
         public void ThenTheSameOrderNumberShouldAppearAtTheTopOfAccountOrders()
         {
-            _scenarioContext.Pending();
+            // Go back to the account and get access to the account order history
+            HomePOM home = (HomePOM)_scenarioContext["homePOM"];
+            home.GoAccountLogin();
+            AccountPOM account = new AccountPOM(_driver);
+            account.GoToAccountOrders();
+
+            try
+            {
+                Assert.That(account.Account_Order_Num.Remove(0, 1), Is.EqualTo((string)_scenarioContext["CheckoutOrderNum"]));
+            }
+            catch (Exception)
+            {
+                throw new Exception("order on checkout does not appear on account");
+            }
+
+            // Reporting for the Order number assertion
+            string totalScreenshot = ScrollElementIntoViewAndTakeScreenshot(_driver, account.GetAccountOrders, "ordernum.png");
+            Console.WriteLine("Order number has been recorded and shows on the account");
+            TestContext.AddTestAttachment(totalScreenshot);
         }
     }
 }

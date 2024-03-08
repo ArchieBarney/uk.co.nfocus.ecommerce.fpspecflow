@@ -71,6 +71,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
             _driver.Url = startURL;
 
             _wrapper.Driver = _driver;
+            _scenarioContext["driverWrapped"] = _wrapper.Driver;
 
             TestPrep();
         }
