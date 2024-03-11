@@ -43,7 +43,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
         }
 
         [Then(@"(.*) is taken off the subtotal")]
-        public void ThenIsTakenOffTheSubtotal(int couponValue)
+        public void ThenIsTakenOffTheSubtotal(decimal couponValue)
         {
             // Wait to ensure coupon value appears on web page
             StaticWaitForElement(_driver, By.CssSelector("td[data-title='Coupon: edgewords'] span[class='woocommerce-Price-amount amount']"));
@@ -51,19 +51,20 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
             // Collecting values for assert to check coupon is applied
             _scenarioContext["subTotal"] = Convert.ToDecimal(_cart.Sub_total.Remove(0, 1));
             _scenarioContext["couponTotal"] = Convert.ToDecimal(_cart.Coupon_total.Remove(0, 1));
+            string couponValueInPercentage = Decimal.Truncate(couponValue * 100).ToString();
 
             try
             {
-                Assert.That(Decimal.Multiply((decimal)_scenarioContext["subTotal"], (decimal)0.15), Is.EqualTo((decimal)_scenarioContext["couponTotal"]));
+                Assert.That(Decimal.Multiply((decimal)_scenarioContext["subTotal"], couponValue), Is.EqualTo((decimal)_scenarioContext["couponTotal"]));
             }
             catch (Exception)
             {
-                throw new Exception("Coupon has not applied sufficient 15% off subtotal");
+                throw new Exception("Coupon has not applied sufficient "+couponValueInPercentage+"% off subtotal");
             }
 
             // Reporting for the coupon assertion
             string couponScreenshot = ScrollElementIntoViewAndTakeScreenshot(_driver, _cart.GetCouponAmount, "coupon.png");
-            Console.WriteLine("Coupon has applied 15%");
+            Console.WriteLine("Coupon has applied "+couponValueInPercentage+"%");
             TestContext.AddTestAttachment(couponScreenshot);
         }
 
