@@ -1,7 +1,8 @@
 ﻿@GUI
 Feature: OrderNumTestCase
 
-A short summary of the feature
+Test case to ensure a completed order will contain an order number at the top of the accounts order
+page
 
 Background: The current webpage is the cart
 
@@ -12,3 +13,5 @@ Scenario: Ensure Order Number is consistent with most recent order
 	And I place the order assuming check payment is triggered
 	When I capture the order number
 	Then The same order number should appear at the top of account orders
+
+# Logout of the account to end test case
