@@ -84,10 +84,13 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Apply a coupon on the cart")]
-        public void ApplyACouponOnTheCart()
+        [NUnit.Framework.TestCaseAttribute("edgewords", "0.15", null)]
+        public void ApplyACouponOnTheCart(string couponName, string couponValue, string[] exampleTags)
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("couponName", couponName);
+            argumentsOfScenario.Add("couponValue", couponValue);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Apply a coupon on the cart", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 10
 this.ScenarioInitialize(scenarioInfo);
@@ -103,13 +106,13 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 11
- testRunner.Given("I have entered valid coupon \'edgewords\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given(string.Format("I have entered valid coupon \'{0}\'", couponName), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 12
  testRunner.When("I click Apply Coupon", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 13
- testRunner.Then("0.15 is taken off the subtotal", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("{0} is taken off the subtotal", couponValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 14
  testRunner.And("Total takes into account coupon + shipping", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

@@ -84,10 +84,16 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Ensure Order Number is consistent with most recent order")]
-        public void EnsureOrderNumberIsConsistentWithMostRecentOrder()
+        [NUnit.Framework.TestCaseAttribute("65 Toon Avenue", "Newcastle", "NE3 3AB", "07754 539781", "random_example@example.com", null)]
+        public void EnsureOrderNumberIsConsistentWithMostRecentOrder(string street, string city, string postcode, string phoneNumber, string email, string[] exampleTags)
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("street", street);
+            argumentsOfScenario.Add("city", city);
+            argumentsOfScenario.Add("postcode", postcode);
+            argumentsOfScenario.Add("phoneNumber", phoneNumber);
+            argumentsOfScenario.Add("email", email);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Ensure Order Number is consistent with most recent order", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 10
 this.ScenarioInitialize(scenarioInfo);
@@ -106,8 +112,7 @@ this.FeatureBackground();
  testRunner.Given("I click on Proceed to Checkout", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 12
- testRunner.And("I fill \'65 Toon Avenue\', \'Newcastle\', \'NE3 3AB\', \'07754 539781\' and \'random_examp" +
-                        "le@example.com\' into the corresponding fields", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("I fill \'{0}\', \'{1}\', \'{2}\', \'{3}\' and \'{4}\' into the corresponding fields", street, city, postcode, phoneNumber, email), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 13
  testRunner.And("I place the order assuming check payment is triggered", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
