@@ -72,8 +72,6 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
 
             _wrapper.Driver = _driver;
             _scenarioContext["driverWrapped"] = _wrapper.Driver;
-
-            TestPrep();
         }
 
         [After("@GUI")]
@@ -83,44 +81,6 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
             home.GoAccountLogin();
             home.Logout();
             _wrapper.Driver.Quit();
-        }
-
-        public void TestPrep()
-        {
-            // Dismiss bottom link to prevent intercepted web elements
-            _wrapper.Driver.FindElement(By.CssSelector(".woocommerce-store-notice__dismiss-link")).Click();
-
-            // Get to the account page from home POM
-            HomePOM home = new(_wrapper.Driver);
-            home.GoAccountLogin();
-            _scenarioContext["homePOM"] = home;
-
-            // Use account POM to login to a placeholder account
-            AccountPOM account = new(_wrapper.Driver)
-            {
-                Username = Environment.GetEnvironmentVariable("EMAIL"),
-                Password = Environment.GetEnvironmentVariable("PASSWORD")
-            };
-            account.AccountLogin();
-
-            //Empty Basket check
-            _wrapper.Driver.FindElement(By.PartialLinkText("Cart")).Click();
-            try
-            {
-                _wrapper.Driver.FindElement(By.CssSelector(".remove")).Click();
-            }
-            catch (Exception)
-            {
-                //Do nothing, the basket is already empty
-            }
-
-            // Navigate back to shop once basket is emptied
-            account.ShopNavigate();
-
-            // Add items to cart and view cart
-            ShopPOM shop = new(_wrapper.Driver);
-            shop.AddItemToCart();
-            shop.VeiwCart();
         }
     }
 }

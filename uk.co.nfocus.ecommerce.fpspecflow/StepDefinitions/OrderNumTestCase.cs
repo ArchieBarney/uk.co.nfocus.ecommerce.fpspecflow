@@ -35,35 +35,44 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
             _cart.ProceedToCheckout();
         }
 
-        [Given(@"I fill '(.*)', '(.*)', '(.*)', '(.*)' and '(.*)' into the corresponding fields")]
-        public void GivenIFillAndIntoTheCorrespondingFields(string street, string town, string postcode, string phone, string email)
+        [When(@"I fill order details into the corresponding fields")]
+        public void WhenIFillOrderDetailsIntoTheCorrespondingFields(Table orderDetailsTable)
         {
+            // Converts input table into dictionary
+            var dictionary = ToDictionary(orderDetailsTable);
+
             // Instansiate the checkout class with all the required fields to pass an order
             CheckoutPOM checkout = new(_driver)
             {
-                firstName = "Archie",
-                lastName = "Barnett",
-                streetAdress = street,
-                townCity = town,
-                postcode = postcode,
-                phone = phone,
-                email = email
+                firstName = dictionary["FirstName"],
+                lastName = dictionary["Surname"],
+                streetAdress = dictionary["Street"],
+                townCity = dictionary["City"],
+                postcode = dictionary["Postcode"],
+                phone = dictionary["PhoneNumber"],
+                email = dictionary["Email"]
             };
             _checkout = checkout;
         }
 
-        [Given(@"I place the order assuming check payment is triggered")]
-        public void GivenIPlaceTheOrderAssumingCheckPaymentIsTriggered()
+        [When(@"Cheque Payment is selected")]
+        public void WhenChequePaymentIsSelected()
         {
             // Seperate reference for stale element (Thread works, web driver wait doesnt work)
             Thread.Sleep(1000);
             var checkPayment = _driver.FindElement(By.CssSelector(".wc_payment_method.payment_method_cheque"));
             checkPayment.Click();
+
+        }
+
+        [When(@"I place an order")]
+        public void WhenIPlaceAnOrder()
+        {
             _checkout.PlaceOrder();
         }
 
-        [When(@"I capture the order number")]
-        public void WhenICaptureTheOrderNumber()
+        [Then(@"an Order Number is displayed")]
+        public void ThenAnOrderNumberIsDisplayed()
         {
             // Wait for the page to load in order to recieve the order number
             StaticWaitForElement(_driver, By.CssSelector("li[class='woocommerce-order-overview__order order'] strong"));
@@ -72,8 +81,8 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
             Console.WriteLine("Order number is: " + checkoutOrderNumber);
         }
 
-        [Then(@"The same order number should appear at the top of account orders")]
-        public void ThenTheSameOrderNumberShouldAppearAtTheTopOfAccountOrders()
+        [Then(@"that Order Number appears in the account order history")]
+        public void ThenThatOrderNumberAppearsInTheAccountOrderHistory()
         {
             // Go back to the account and get access to the account order history
             HomePOM home = (HomePOM)_scenarioContext["homePOM"];
