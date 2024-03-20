@@ -13,13 +13,15 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.Support.POMClasses
     internal class ShopPOM
     {
         private IWebDriver _driver;
+        private string _cartItem;
 
-        public ShopPOM(IWebDriver driver)
+        public ShopPOM(IWebDriver driver, string item)
         {
             this._driver = driver;
+            this._cartItem = "a[aria-label='Add “"+item+"” to your cart']";
         }
 
-        private IWebElement _addToCart => _driver.FindElement(By.CssSelector("a[aria-label='Add “Beanie” to your cart']"));
+        private IWebElement _addToCart => _driver.FindElement(By.CssSelector(_cartItem));
 
         private IWebElement _veiwCart => new WebDriverWait(_driver, TimeSpan.FromSeconds(3)).Until(drv => drv.FindElement(By.CssSelector("a[title='View cart']")));
 

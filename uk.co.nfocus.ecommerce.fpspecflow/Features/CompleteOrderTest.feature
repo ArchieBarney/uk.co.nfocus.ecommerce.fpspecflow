@@ -1,7 +1,8 @@
 ﻿@GUI
 Feature: CompleteOrderTest
 
-A short summary of the feature
+A set of test cases for features relating to the completion of an order, using coupons and setting up 
+an appropriate set of billing information to be used for a completed order.
 
 Background: Ensure there are items in the cart and we are logged in
 	Given I am logged in as a customer

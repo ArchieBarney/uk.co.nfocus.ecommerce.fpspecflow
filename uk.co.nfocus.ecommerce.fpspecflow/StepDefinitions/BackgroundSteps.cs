@@ -61,7 +61,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
             account.ShopNavigate();
 
             // Add items to cart and view cart
-            ShopPOM shop = new(_driver);
+            ShopPOM shop = new(_driver, item);
             shop.AddItemToCart();
             shop.VeiwCart();
         }
