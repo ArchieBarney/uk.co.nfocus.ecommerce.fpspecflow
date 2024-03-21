@@ -34,6 +34,8 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.Support.POMClasses
 
         private IWebElement _orderNumber => _driver.FindElement(By.CssSelector("li[class='woocommerce-order-overview__order order'] strong"));
 
+        private IWebElement _chequePayment => _driver.FindElement(By.CssSelector(".wc_payment_method.payment_method_cheque"));
+
         public string firstName
         {
             set
@@ -99,9 +101,19 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.Support.POMClasses
 
         public string Order_Number => _orderNumber.Text;
 
+        public By GetOrderNumberSelector
+        {
+            get { return By.CssSelector("li[class='woocommerce-order-overview__order order'] strong"); }
+        }
+
         public void PlaceOrder()
         {
             _placeOrderButton.Click();
+        }
+
+        public void CheckChequePayments()
+        {
+            _chequePayment.Click();
         }
     }
 }

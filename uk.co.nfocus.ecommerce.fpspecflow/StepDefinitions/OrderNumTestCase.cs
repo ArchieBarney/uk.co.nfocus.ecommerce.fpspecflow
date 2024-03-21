@@ -60,8 +60,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
         {
             // Seperate reference for stale element (Thread works, web driver wait doesnt work)
             Thread.Sleep(1000);
-            var checkPayment = _driver.FindElement(By.CssSelector(".wc_payment_method.payment_method_cheque"));
-            checkPayment.Click();
+            _checkout.CheckChequePayments();
 
         }
 
@@ -75,7 +74,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
         public void ThenAnOrderNumberIsDisplayed()
         {
             // Wait for the page to load in order to recieve the order number
-            StaticWaitForElement(_driver, By.CssSelector("li[class='woocommerce-order-overview__order order'] strong"));
+            StaticWaitForElement(_driver, _checkout.GetOrderNumberSelector);
             string checkoutOrderNumber = _checkout.Order_Number;
             _scenarioContext["CheckoutOrderNum"] = checkoutOrderNumber;
             Console.WriteLine("Order number is: " + checkoutOrderNumber);
@@ -90,14 +89,9 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
             AccountPOM account = new AccountPOM(_driver);
             account.GoToAccountOrders();
 
-            try
-            {
-                Assert.That(account.Account_Order_Num.Remove(0, 1), Is.EqualTo((string)_scenarioContext["CheckoutOrderNum"]));
-            }
-            catch (Exception)
-            {
-                throw new Exception("order on checkout does not appear on account");
-            }
+            Assert.That(account.Account_Order_Num.Remove(0, 1),
+                Is.EqualTo((string)_scenarioContext["CheckoutOrderNum"]),
+                "order on checkout does not appear on account");
 
             // Reporting for the Order number assertion
             string totalScreenshot = ScrollElementIntoViewAndTakeScreenshot(_driver, account.GetAccountOrders, "ordernum.png");
