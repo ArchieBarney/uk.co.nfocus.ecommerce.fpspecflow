@@ -24,11 +24,10 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
         [Given(@"I am logged in as a customer")]
         public void GivenIAmLoggedInAsACustomer()
         {
-            // Dismiss bottom link to prevent intercepted web elements
-            _driver.FindElement(By.CssSelector(".woocommerce-store-notice__dismiss-link")).Click();
-
             // Get to the account page from home POM
             HomePOM home = new(_driver);
+            // Dismiss bottom link to prevent intercepted web elements
+            home.DismissCookieLink();
             home.GoAccountLogin();
             _scenarioContext["homePOM"] = home;
 
@@ -45,16 +44,9 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
         [Given(@"I have added '(.*)' to my cart")]
         public void GivenIHaveAddedToMyCart(string item)
         {
-            //Empty Basket check
-            _driver.FindElement(By.PartialLinkText("Cart")).Click();
-            try
-            {
-                _driver.FindElement(By.CssSelector(".remove")).Click();
-            }
-            catch (Exception)
-            {
-                //Do nothing, the basket is already empty
-            }
+            //Empty Basket
+            CartPOM cart = new(_driver);
+            cart.EmptyCart();
 
             // Navigate back to shop once basket is emptied
             AccountPOM account = (AccountPOM)_scenarioContext["accountPOM"];

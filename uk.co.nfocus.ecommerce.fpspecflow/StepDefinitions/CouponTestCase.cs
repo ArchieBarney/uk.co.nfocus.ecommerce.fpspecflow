@@ -29,10 +29,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
         public void GivenIHaveEnteredValidCoupon(string couponCode)
         {
             // Apply coupon using POM
-            CartPOM cart = new(_driver)
-            {
-                coupon = couponCode
-            };
+            CartPOM cart = new(_driver, couponCode);
             _cart = cart;
         }
 
@@ -46,7 +43,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
         public void ThenIsTakenOffTheSubtotal(string couponPercentage)
         {
             // Wait to ensure coupon value appears on web page
-            StaticWaitForElement(_driver, By.CssSelector("td[data-title='Coupon: edgewords'] span[class='woocommerce-Price-amount amount']"));
+            StaticWaitForElement(_driver, _cart.GetCouponValueOnWebPage);
 
             // Collecting values for assert to check coupon is applied
             _scenarioContext["subTotal"] = Convert.ToDecimal(_cart.Sub_total.Remove(0, 1));
