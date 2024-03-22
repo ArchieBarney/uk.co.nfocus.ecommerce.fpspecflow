@@ -17,7 +17,10 @@ Scenario Outline: Apply a coupon on the cart
 
 Examples: 
 	| couponName | couponPercentage |
-	| edgewords  | 15%				|
+	| edgewords  | 15%              |
+	| edgewords  | 10%              |
+	| nfocus     | 25%              |
+	| nfocus     | 20%              |
 
 
 Scenario: Ensure Order Number is consistent with most recent order

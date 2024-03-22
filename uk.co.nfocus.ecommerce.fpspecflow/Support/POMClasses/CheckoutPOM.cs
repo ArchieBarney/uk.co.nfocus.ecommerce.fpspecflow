@@ -101,7 +101,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.Support.POMClasses
 
         public string Order_Number => _orderNumber.Text;
 
-        public By GetOrderNumberSelector
+        public static By GetOrderNumberSelector
         {
             get { return By.CssSelector("li[class='woocommerce-order-overview__order order'] strong"); }
         }

@@ -58,7 +58,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
         [When(@"Cheque Payment is selected")]
         public void WhenChequePaymentIsSelected()
         {
-            // Seperate reference for stale element (Thread works, web driver wait doesnt work)
+            // Sleep for stale element (Thread works, conditional wait or implicit timeout doesn't work)
             Thread.Sleep(1000);
             _checkout.CheckChequePayments();
 
@@ -74,7 +74,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
         public void ThenAnOrderNumberIsDisplayed()
         {
             // Wait for the page to load in order to recieve the order number
-            StaticWaitForElement(_driver, _checkout.GetOrderNumberSelector);
+            StaticWaitForElement(_driver, CheckoutPOM.GetOrderNumberSelector);
             string checkoutOrderNumber = _checkout.Order_Number;
             _scenarioContext["CheckoutOrderNum"] = checkoutOrderNumber;
             Console.WriteLine("Order number is: " + checkoutOrderNumber);
@@ -89,12 +89,14 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
             AccountPOM account = new AccountPOM(_driver);
             account.GoToAccountOrders();
 
-            Assert.That(account.Account_Order_Num.Remove(0, 1),
-                Is.EqualTo((string)_scenarioContext["CheckoutOrderNum"]),
+            Assert.That((string)_scenarioContext["CheckoutOrderNum"],
+                Is.EqualTo(account.Account_Order_Num.Remove(0, 1)),
                 "order on checkout does not appear on account");
 
             // Reporting for the Order number assertion
-            string totalScreenshot = ScrollElementIntoViewAndTakeScreenshot(_driver, account.GetAccountOrders, "ordernum.png");
+            string totalScreenshot = ScrollElementIntoViewAndTakeScreenshot(_driver, 
+                                                                            account.GetAccountOrders,
+                                                                            "ordernum.png");
             Console.WriteLine("Order number has been recorded and shows on the account");
             TestContext.AddTestAttachment(totalScreenshot);
         }

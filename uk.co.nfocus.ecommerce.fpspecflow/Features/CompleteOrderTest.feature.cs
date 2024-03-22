@@ -92,6 +92,9 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Apply a coupon on the cart")]
         [NUnit.Framework.TestCaseAttribute("edgewords", "15%", null)]
+        [NUnit.Framework.TestCaseAttribute("edgewords", "10%", null)]
+        [NUnit.Framework.TestCaseAttribute("nfocus", "25%", null)]
+        [NUnit.Framework.TestCaseAttribute("nfocus", "20%", null)]
         public void ApplyACouponOnTheCart(string couponName, string couponPercentage, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -135,7 +138,7 @@ this.FeatureBackground();
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Ensure Order Number is consistent with most recent order", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 23
+#line 26
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -148,7 +151,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 7
 this.FeatureBackground();
 #line hidden
-#line 24
+#line 27
  testRunner.Given("I click on Proceed to Checkout", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
@@ -175,19 +178,19 @@ this.FeatureBackground();
                 table1.AddRow(new string[] {
                             "Email",
                             "random_example@example.com"});
-#line 25
+#line 28
  testRunner.When("I fill order details into the corresponding fields", ((string)(null)), table1, "When ");
 #line hidden
-#line 34
+#line 37
  testRunner.And("Cheque Payment is selected", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 35
+#line 38
  testRunner.And("I place an order", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 36
+#line 39
  testRunner.Then("an Order Number is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 37
+#line 40
  testRunner.And("that Order Number appears in the account order history", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }

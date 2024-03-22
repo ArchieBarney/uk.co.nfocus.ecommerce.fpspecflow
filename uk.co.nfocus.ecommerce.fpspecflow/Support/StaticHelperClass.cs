@@ -19,7 +19,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.Support
 
         public static string ScrollElementIntoViewAndTakeScreenshot(IWebDriver driver, IWebElement element, string nameOfScreenshot)
         {
-            // FOR DANNY! Sleep used to make sure element scrolls into view for screenshot
+            // Thread sleep to give time for the injected js to get to the element on webpage
             Thread.Sleep(500);
 
             IJavaScriptExecutor? jsdriver = driver as IJavaScriptExecutor;
@@ -29,10 +29,10 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.Support
                 jsdriver.ExecuteScript("arguments[0].scrollIntoView()", element);
             }
 
-            return ScreenshotElement(driver, nameOfScreenshot);
+            return ScreenshotPage(driver, nameOfScreenshot);
         }
 
-        public static string ScreenshotElement(IWebDriver driver, string nameOfScreenshot)
+        public static string ScreenshotPage(IWebDriver driver, string nameOfScreenshot)
         {
             Screenshot screenshot = driver.TakeScreenshot();
             screenshot.SaveAsFile(Directory.GetCurrentDirectory() + nameOfScreenshot);

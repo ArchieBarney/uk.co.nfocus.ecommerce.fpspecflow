@@ -50,12 +50,16 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
             _scenarioContext["couponTotal"] = Convert.ToDecimal(_cart.Coupon_total.Remove(0, 1));
             decimal couponDecimalValue = Convert.ToDecimal(couponPercentage.Remove(couponPercentage.Length - 1)) / 100;
 
+            
             Assert.That(Decimal.Multiply((decimal)_scenarioContext["subTotal"], couponDecimalValue),
                 Is.EqualTo((decimal)_scenarioContext["couponTotal"]),
                 "Coupon has not applied sufficient " + couponPercentage + " off subtotal");
             
+
             // Reporting for the coupon assertion
-            string couponScreenshot = ScrollElementIntoViewAndTakeScreenshot(_driver, _cart.GetCouponAmount, "coupon.png");
+            string couponScreenshot = ScrollElementIntoViewAndTakeScreenshot(_driver,
+                                                                             _cart.GetCouponAmount,
+                                                                             "coupon.png");
             Console.WriteLine("Coupon has applied "+ couponPercentage + "%");
             TestContext.AddTestAttachment(couponScreenshot);
         }
@@ -67,13 +71,17 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
             decimal shippingCost = Convert.ToDecimal(_cart.Shipping_total.Remove(0, 1));
             decimal finalTotal = Convert.ToDecimal(_cart.Final_total.Remove(0, 1));
 
-            Assert.That((decimal)_scenarioContext["subTotal"] - (decimal)_scenarioContext["couponTotal"] + shippingCost,
-                Is.EqualTo(finalTotal),
+            
+            Assert.That(finalTotal,
+                Is.EqualTo((decimal)_scenarioContext["subTotal"] - (decimal)_scenarioContext["couponTotal"] + shippingCost),
                 "Final total is not properly calculated, make sure shipping" +
                 " cost is applied and any coupon discounts are sufficiently applied");
 
+            
             // Reporting for the shipping + total assertion
-            string totalScreenshot = ScrollElementIntoViewAndTakeScreenshot(_driver, _cart.GetFinalTotal, "total.png");
+            string totalScreenshot = ScrollElementIntoViewAndTakeScreenshot(_driver, 
+                                                                            _cart.GetFinalTotal, 
+                                                                            "total.png");
             Console.WriteLine("Total has been sufficiently calculated");
             TestContext.AddTestAttachment(totalScreenshot);
         }
