@@ -113,6 +113,8 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.Support.POMClasses
 
         public void CheckChequePayments()
         {
+            // Sleep for stale element (Thread works, conditional wait or implicit timeout doesn't work)
+            Thread.Sleep(1000);
             _chequePayment.Click();
         }
     }

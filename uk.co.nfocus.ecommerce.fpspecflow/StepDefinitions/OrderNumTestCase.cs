@@ -58,10 +58,7 @@ namespace uk.co.nfocus.ecommerce.fpspecflow.StepDefinitions
         [When(@"Cheque Payment is selected")]
         public void WhenChequePaymentIsSelected()
         {
-            // Sleep for stale element (Thread works, conditional wait or implicit timeout doesn't work)
-            Thread.Sleep(1000);
             _checkout.CheckChequePayments();
-
         }
 
         [When(@"I place an order")]
